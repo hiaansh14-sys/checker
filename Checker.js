@@ -490,7 +490,7 @@ board.forEach((r)=>{
                         if(c.children.length==0)// if cell already has a child, don't allow move
                             {
                                 let board_index=board.indexOf(r)
-                                if(takebu.tagName="Button"){piece_move(takebu, indexOf_r, board_index, c);}     
+                                if(takebu.tagName=="Button"){piece_move(takebu, indexOf_r, board_index, c);}     
                         }//if close (cell already has a child)
              
                    } //if close (make movement of pieces in every row in this pieces move only in nearest row)
@@ -609,12 +609,19 @@ if((indexOf_r+1)%2==0 )//main condition which used for capture piece open
 let col_index;//for find the column index
 //indexOf_r;//for find the row index
 //sound for king move open
-let king_movie=new Audio("king_move.mp3");
-let king_spone=new Audio("king_spone.mp3");
-let king_cap=new Audio("king_capture.mp3");
-function playKingSound(){king_movie.play();}
-function KingSpone(){king_spone.play();}
-function KingCapture(){king_cap.play();}
+let king_movie = new Audio('king_move.mp3');
+let king_spone = new Audio('king_spone.mp3');
+let king_cap = new Audio('king_capture.mp3');
+
+function playKingSound(){
+    king_movie.play().catch(error => console.log("king_move error:", error));
+}
+function KingSpone(){
+    king_spone.play().catch(error => console.log("king_spone error:", error));
+}
+function Kingcapture(){
+    king_cap.play().catch(error => console.log("king_capture error:", error));
+}
 //sound for king move close
 
 board.forEach((r)=>{
@@ -662,7 +669,7 @@ function KingCapture(R3,C3,r_num,col_num) {
     if(r_num==1 && col_num==1){
         if(board[R3-1][C3-1].children.length>0){
            if(CheckPieceIsNotSameColor(board[R3-1][C3-1].children[0], takebu)){
-            KingCapture();
+            Kingcapture();
 board[R3-1][C3-1].children[0].remove()
 put(board[R3][C3],takebu);
 CheckNextChanceForKing(R3,C3);
@@ -672,7 +679,7 @@ CheckNextChanceForKing(R3,C3);
     else if(r_num==1 && col_num==-1){
         if(board[R3-1][C3+1].children.length>0){
            if(CheckPieceIsNotSameColor(board[R3-1][C3+1].children[0], takebu)){
-            KingCapture();
+            Kingcapture();
 board[R3-1][C3+1].children[0].remove()
 put(board[R3][C3],takebu);
 CheckNextChanceForKing(R3,C3);
@@ -682,7 +689,7 @@ CheckNextChanceForKing(R3,C3);
     else if(r_num==-1 && col_num==1){
         if(board[R3+1][C3-1].children.length>0){
            if(CheckPieceIsNotSameColor(board[R3+1][C3-1].children[0], takebu)){
-            KingCapture();
+            Kingcapture();
 board[R3+1][C3-1].children[0].remove()
 put(board[R3][C3],takebu);
 CheckNextChanceForKing(R3,C3);
@@ -692,7 +699,7 @@ CheckNextChanceForKing(R3,C3);
     else if(r_num==-1 && col_num==-1){
         if(board[R3+1][C3+1].children.length>0){
            if(CheckPieceIsNotSameColor(board[R3+1][C3+1].children[0], takebu)){
-            KingCapture();
+            Kingcapture();
 board[R3+1][C3+1].children[0].remove()
 put(board[R3][C3],takebu);
 CheckNextChanceForKing(R3,C3);
