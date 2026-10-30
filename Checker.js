@@ -116,6 +116,7 @@ function piece_move(takebu, indexof_r,board_Index,column_index){
     }
     }
     else if(takebu.className=="bpiece"){
+        console.log("Black piece moved");
         if(takebu && indexof_r-1==board_Index){
             column_index.appendChild(takebu)
             sound();
@@ -160,6 +161,8 @@ piece.remove()
     }
 
 }
+let w=12 //counter for white pieces which used to find winner and draw
+let b=12 //counter for black pieces which used to find winner and draw
 //code for find and capture blackpiece ⚫open
 function col_find_blackpiece(board,rowIndex,col_value,c,takebu){
     for(let i=0;i<8;i++){
@@ -171,6 +174,15 @@ function col_find_blackpiece(board,rowIndex,col_value,c,takebu){
                     capturepiece(board[rowIndex][i].children[0]);
                     put(c,takebu);
                     piece_cut();
+                    b--;
+                    if(b == 0){
+                        console.log("Black pieces are finished! and White player wins!");
+                        return 1;
+                    }
+                    else if(b==1 && w==1){
+                        console.log("Draw!");
+                        return 1;
+                    }
                     let col=textToInt(c.textContent)
                     check_next_move_for_white(board,rowIndex+1,col,takebu)
                     playermove(2);
@@ -199,6 +211,15 @@ function col_find_whitepiece(board,rowIndex,col_value,c,takebu){
                     capturepiece(board[rowIndex][i].children[0]);
                     put(c,takebu);
                     piece_cut();
+                    w--;
+                    if(w == 0){
+                        console.log("White pieces are finished! and Black player wins!");
+                        return 1;
+                    }
+                    else if(w==1 && b==1){
+                        console.log("Draw!");
+                        return 1;
+                    }
                     let col=textToInt(c.textContent)
                     check_next_move_for_black(board,rowIndex-1,col,takebu)
                     playermove(1);
@@ -260,6 +281,7 @@ function fetch_R2_c1_c2_for_white(board,R2,c1,c2,button){
     let i2=-1
     if(R2 ==7 || R2==0){
         console.log("no check, next player chance");
+        takebu=null;
         playermove(2);
     }else{
         for(let i=0;i<8;i++){
@@ -278,6 +300,7 @@ function fetch_R2_c1_c2_for_white(board,R2,c1,c2,button){
                         }
                     }else{
                         console.log("fetch_R2_c1_c2_for_white....this is  white piece in R2 C1=",board[R2][i].children[0]);
+                        takebu=null;
                     }   
                 }
             }else if(a==c2){
@@ -293,6 +316,7 @@ function fetch_R2_c1_c2_for_white(board,R2,c1,c2,button){
                         }
                     }else{
                         console.log("fetch_R2_c1_c2_for_white....this is  white piece in R2 C2=",board[R2][i].children[0]);
+                        takebu=null;
                     }   
                 } 
             }
@@ -323,8 +347,10 @@ else if(i1>-1 &&i2>-1){
         console.log("fetch_R3_c1_c2....Next move not your",board[R3][i1],board[R3][i2]);
         if(value==1){
         playermove(2);
+        takebu=null;
     }else if(value==2){
         playermove(1);
+        takebu=null;
     }
     }
 }
@@ -394,6 +420,7 @@ function fetch_R2_c1_c2_for_black(board,R2,c1,c2,button){
     let i2=-1
     if(R2 >=7 || R2<=0){
         // console.log("no check, next player chance");
+        takebu=null;
         playermove(1);
     }else{
         for(let i=0;i<8;i++){ 
@@ -411,6 +438,7 @@ function fetch_R2_c1_c2_for_black(board,R2,c1,c2,button){
                            playermove(1) 
                         }
                     }else{
+                        takebu=null;
                         console.log("fetch_R2_c1_c2_for_black....this is  black piece in R2 C1=",board[R2][i].children[0]);
                     }   
                 }
@@ -425,6 +453,7 @@ function fetch_R2_c1_c2_for_black(board,R2,c1,c2,button){
                         else{console.log("no check")
                            playermove(1)}
                     }else{
+                        takebu=null;
                         console.log("fetch_R2_c1_c2_for_black....this is  black piece in R2 C2=",board[R2][i].children[0]);
                     }   
                 } 
@@ -490,7 +519,7 @@ board.forEach((r)=>{
                         if(c.children.length==0)// if cell already has a child, don't allow move
                             {
                                 let board_index=board.indexOf(r)
-                                if(takebu.tagName=="Button"){piece_move(takebu, indexOf_r, board_index, c);}     
+                                if(takebu.tagName=="BUTTON"){piece_move(takebu, indexOf_r, board_index, c);}     
                         }//if close (cell already has a child)
              
                    } //if close (make movement of pieces in every row in this pieces move only in nearest row)
@@ -501,7 +530,7 @@ board.forEach((r)=>{
                         if(c.children.length==0)// if cell already has a child, don't allow move
                             {
                                 let board_index=board.indexOf(r)
-                              if(takebu.tagName="Button"){piece_move(takebu, indexOf_r, board_index, c);}     
+                              if(takebu.tagName=="BUTTON"){piece_move(takebu, indexOf_r, board_index, c);}     
                         }//if close (cell already has a child)
              
                    } //if close (make movement of pieces in every row in this pieces move only in nearest row)
@@ -535,14 +564,14 @@ if((indexOf_r+1)%2==0 )//main condition which used for capture piece open
     let smaller = (takeText < R3_C_value) ? takeText : R3_C_value;
     // console.log("smaller", smaller);
     col_find_blackpiece(board, indexOf_r+1, smaller,c,takebu); 
-    takebu=null;
+   
     classname=null;
     
 }else{
     let larger = (takeText > R3_C_value) ? takeText : R3_C_value;
     //  console.log("larger", larger);
     col_find_blackpiece(board, indexOf_r+1, larger,c,takebu);
-    takebu=null
+    
     classname=null
     
       
@@ -578,7 +607,6 @@ if((indexOf_r+1)%2==0 )//main condition which used for capture piece open
     let smaller = (takeText < R3_C_value) ? takeText : R3_C_value;
     // console.log("smaller", smaller);
     col_find_whitepiece(board, indexOf_r-1, smaller,c,takebu); 
-    takebu=null
     classname=null
 }else{
     let larger = (takeText > R3_C_value) ? takeText : R3_C_value;
@@ -586,7 +614,7 @@ if((indexOf_r+1)%2==0 )//main condition which used for capture piece open
     //  console.log("larger", larger);
      console.log(takebu)
     col_find_whitepiece(board, indexOf_r-1, larger,c,takebu);
-    takebu=null
+   
     classname=null
       
 }//main condition which used for capture black piece open
@@ -672,6 +700,14 @@ function KingCapture(R3,C3,r_num,col_num) {
             Kingcapture();
 board[R3-1][C3-1].children[0].remove()
 put(board[R3][C3],takebu);
+console.log("KingCapture......",takebu);
+// if(takebu.className=="kbpiece"){
+//     // b--;
+//     // if(b == 0){
+//     //     console.log("Black pieces are finished! and White player wins!");
+//     //     return 1;
+//     // }
+// }
 CheckNextChanceForKing(R3,C3);
            }
         }
