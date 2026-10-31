@@ -163,6 +163,8 @@ piece.remove()
 }
 let w=12 //counter for white pieces which used to find winner and draw
 let b=12 //counter for black pieces which used to find winner and draw
+const game_menu=document.getElementById("game-menu"); // take his h2 which show the result of the game
+let game_menu_h2=game_menu.querySelector("h2");
 //code for find and capture blackpiece ⚫open
 function col_find_blackpiece(board,rowIndex,col_value,c,takebu){
     for(let i=0;i<8;i++){
@@ -177,10 +179,15 @@ function col_find_blackpiece(board,rowIndex,col_value,c,takebu){
                     b--;
                     if(b == 0){
                         console.log("Black pieces are finished! and White player wins!");
+                        game_menu_h2.textContent="White player wins!";
+                        game_menu_h2.style.display="block";
+                        screen_cover.style.display = 'block';
                         return 1;
                     }
                     else if(b==1 && w==1){
-                        console.log("Draw!");
+                        game_menu_h2.textContent="Draw!";
+                        game_menu_h2.style.display="block";
+                        screen_cover.style.display = 'block';
                         return 1;
                     }
                     let col=textToInt(c.textContent)
@@ -213,11 +220,17 @@ function col_find_whitepiece(board,rowIndex,col_value,c,takebu){
                     piece_cut();
                     w--;
                     if(w == 0){
-                        console.log("White pieces are finished! and Black player wins!");
+                        // console.log("White pieces are finished! and Black player wins!");
+                         game_menu_h2.textContent="Black player wins!";
+                        game_menu_h2.style.display="block";
+                        screen_cover.style.display = 'block';
                         return 1;
                     }
                     else if(w==1 && b==1){
-                        console.log("Draw!");
+                        // console.log("Draw!");
+                        game_menu_h2.textContent="Draw!";
+                        game_menu_h2.style.display="block";
+                        screen_cover.style.display = 'block';
                         return 1;
                     }
                     let col=textToInt(c.textContent)
@@ -701,13 +714,7 @@ function KingCapture(R3,C3,r_num,col_num) {
 board[R3-1][C3-1].children[0].remove()
 put(board[R3][C3],takebu);
 console.log("KingCapture......",takebu);
-// if(takebu.className=="kbpiece"){
-//     // b--;
-//     // if(b == 0){
-//     //     console.log("Black pieces are finished! and White player wins!");
-//     //     return 1;
-//     // }
-// }
+win_Draw();
 CheckNextChanceForKing(R3,C3);
            }
         }
@@ -718,6 +725,7 @@ CheckNextChanceForKing(R3,C3);
             Kingcapture();
 board[R3-1][C3+1].children[0].remove()
 put(board[R3][C3],takebu);
+win_Draw();
 CheckNextChanceForKing(R3,C3);
            }
         }
@@ -728,6 +736,7 @@ CheckNextChanceForKing(R3,C3);
             Kingcapture();
 board[R3+1][C3-1].children[0].remove()
 put(board[R3][C3],takebu);
+win_Draw();
 CheckNextChanceForKing(R3,C3);
            }
         }
@@ -738,6 +747,7 @@ CheckNextChanceForKing(R3,C3);
             Kingcapture();
 board[R3+1][C3+1].children[0].remove()
 put(board[R3][C3],takebu);
+win_Draw();
 CheckNextChanceForKing(R3,C3);
            }
         }
@@ -810,6 +820,30 @@ function createKingPiece(piece) {
     }
 }
 //create king piece close
+// check win draw condition open
+function win_Draw() {
+if(w==0) {
+     game_menu_h2.textContent="black player wins!";
+                        game_menu_h2.style.display="block";
+                        screen_cover.style.display = 'block';
+} else if(b==0) {
+    game_menu_h2.textContent="white player wins!";
+                        game_menu_h2.style.display="block";
+                        screen_cover.style.display = 'block';
+}
+else if(w==1 && b==1) {
+    game_menu_h2.textContent="Draw!";
+                        game_menu_h2.style.display="block";
+                        screen_cover.style.display = 'block';
+}
+else if(takebu.className=="kbpiece") {
+    w--;
+}
+else if(takebu.className=="kwpiece") {
+    b--;
+}
+}
+//check win draw condition close
 //king piece code close
 
 //control setting open
@@ -822,6 +856,7 @@ function ScreenCover() {
     }
 }
 function re_arrangeBoard() {
+    game_menu_h2.style.display="none";
      let btn = document.createElement("button");
     for(let i=0; i<8; i++) {
 if(i==0 ||i==1||i==2) {
@@ -849,6 +884,7 @@ if(i==0 ||i==1||i==2) {
     }
 }
 function clearBoard() {
+    game_menu_h2.style.display="none";
     ScreenCover();
         board.forEach(row => {
         row.forEach(cell => {
