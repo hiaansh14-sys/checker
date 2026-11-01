@@ -20,10 +20,12 @@ function playermove(value){
     // let blackKing = document.getElementsByClassName('kbpiece');
    if(value==1){
     // code for player 1 move
+    // console.log("Player 1's turn",value);
 playerturn(player1,messageBox1,whitePiece,player2,messageBox2,blackPiece);
 playerturnking(whitek,blackk);
    }
    else if(value==2){
+    // console.log("Player 2's turn",value);
 playerturn(player2,messageBox2,blackPiece,player1,messageBox1,whitePiece);
 playerturnking(blackk,whitek);
    }
@@ -38,6 +40,16 @@ function playerturn(p1,m1,b1,p2,m2,b2){
     m2.style.display= 'none';
     // Disable pieces for other player
     npm.forEach((piece)=> piece.disabled = true);
+    //active player
+p1.style.background = `
+    linear-gradient(135deg, #aedbf6, #6e9ede) padding-box,
+    linear-gradient( #01fffe,#6a5fc8,#22297a,#057ff5,#01fffe) border-box
+`;
+p1.style.border = '4px solid transparent';
+
+// Inactive player - Gray (waiting)
+p2.style.background =
+  'linear-gradient(130deg, #6773da 0%, #6773da 40%, #0bbbbb 80%, #aedbf6 100%)';
 }
 function playerturnking(king1,king2){
     if(king1!=null){
@@ -192,7 +204,6 @@ function col_find_blackpiece(board,rowIndex,col_value,c,takebu){
                     }
                     let col=textToInt(c.textContent)
                     check_next_move_for_white(board,rowIndex+1,col,takebu)
-                    playermove(2);
                 }else{
                     console.log("col_find_blackpiece............this is white piece ");
                     return 0;
@@ -235,7 +246,7 @@ function col_find_whitepiece(board,rowIndex,col_value,c,takebu){
                     }
                     let col=textToInt(c.textContent)
                     check_next_move_for_black(board,rowIndex-1,col,takebu)
-                    playermove(1);
+                    takebu=null
                 }else{
                     console.log("col_find_whitepiece............this is black piece ");
                     return 0;
@@ -353,11 +364,11 @@ if(i1==-1 && i2==-1){
 }
 else if(i1>-1 &&i2>-1){
     if(board[R3][i1].children.length==0 || board[R3][i2].children.length==0){
-        console.log("fetch_R3_c1_c2....Next move is your",board[R3][i1],board[R3][i2]);
+        // console.log("fetch_R3_c1_c2....Next move is your",board[R3][i1],board[R3][i2],value);
         playermove(value);
     }
     else{
-        console.log("fetch_R3_c1_c2....Next move not your",board[R3][i1],board[R3][i2]);
+        // console.log("fetch_R3_c1_c2....Next move not your",board[R3][i1],board[R3][i2],value);
         if(value==1){
         playermove(2);
         takebu=null;
@@ -369,10 +380,10 @@ else if(i1>-1 &&i2>-1){
 }
 else if(i1>-1){
     if(board[R3][i1].children.length==0){
-        console.log("fetch_R3_c1_c2....Next move is your");
+        console.log("fetch_R3_c1_c2....Next move is your",value);
         playermove(value);
     }else{
-        console.log("fetch_R3_c1_c2....Next move not your");
+        console.log("fetch_R3_c1_c2....Next move not your",value);
         if(value==1){
         playermove(2);
     }else if(value==2){
@@ -383,7 +394,7 @@ else if(i1>-1){
 else if(i2>-1){
     if(board[R3][i2].children.length==0){
         console.log("fetch_R3_c1_c2....Next move is your");
-        playermove(1);
+        playermove(value);
     }else{
         console.log("fetch_R3_c1_c2....Next move not your");
         if(value==1){
